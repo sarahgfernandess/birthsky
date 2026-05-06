@@ -18,45 +18,29 @@ body{
     display:flex;
     justify-content:center;
     align-items:center;
-    overflow:hidden;
     background:
         radial-gradient(circle at 20% 30%, rgba(123,47,247,0.4), transparent 25%),
         radial-gradient(circle at 80% 20%, rgba(0,191,255,0.3), transparent 30%),
         radial-gradient(circle at 50% 80%, rgba(255,0,255,0.2), transparent 30%),
         linear-gradient(135deg,#050510,#0d0221,#1a0933);
-    animation: galaxyMove 12s ease infinite alternate;
     color:white;
 }
 
-@keyframes galaxyMove{
-    0%{ background-position: 0% 50%; }
-    100%{ background-position: 100% 50%; }
-}
-
 .card{
-    width:400px;
+    width:380px;
     background:rgba(255,255,255,0.08);
     backdrop-filter:blur(18px);
     padding:30px;
     border-radius:20px;
     text-align:center;
-    box-shadow:0 0 30px rgba(0,0,0,0.4);
-}
-
-h1{ margin-bottom:10px; }
-
-p.sub{
-    margin-bottom:20px;
-    opacity:0.8;
 }
 
 input{
     width:100%;
     padding:12px;
-    margin-bottom:15px;
+    margin-bottom:10px;
     border:none;
     border-radius:10px;
-    font-size:15px;
 }
 
 button{
@@ -66,79 +50,46 @@ button{
     border-radius:10px;
     background:#7b2ff7;
     color:white;
-    font-size:16px;
     cursor:pointer;
-    transition:0.3s;
-}
-
-button:hover{
-    background:#9d4edd;
 }
 
 #resultado{
-    margin-top:25px;
-    line-height:1.8;
-    font-size:17px;
+    margin-top:15px;
 }
 </style>
 </head>
+
 <body>
 
 <div class="card">
     <h1>🌌 BirthSky</h1>
-    <p class="sub">Veja o céu no momento do nascimento</p>
 
-    <input type="date" id="dataNascimento">
-    <input type="time" id="horaNascimento">
-    <input type="text" id="localNascimento" placeholder="Cidade de nascimento">
+    <input type="date" id="data">
+    <input type="time" id="hora">
+    <input type="text" id="local" placeholder="Cidade">
 
-    <button onclick="gerarMapa()">Gerar Mapa Celeste</button>
+    <button onclick="gerar()">Gerar céu</button>
 
     <div id="resultado"></div>
 </div>
 
 <script>
-function gerarMapa() {
-    const data = document.getElementById("dataNascimento").value;
-    const hora = document.getElementById("horaNascimento").value;
-    const local = document.getElementById("localNascimento").value;
-    const resultado = document.getElementById("resultado");
+function gerar(){
+    const data = document.getElementById("data").value;
+    const hora = document.getElementById("hora").value;
+    const local = document.getElementById("local").value;
 
-    if (!data || !hora || !local) {
-        resultado.innerHTML = "Preencha todos os campos.";
+    if(!data || !hora || !local){
+        document.getElementById("resultado").innerHTML = "Preencha tudo.";
         return;
     }
 
-    const faseLua = calcularFaseLua(data);
+    // TESTE pra garantir que está funcionando
+    alert("Abrindo mapa...");
 
-    resultado.innerHTML = `
-        <strong>🌍 Local:</strong> ${local}<br>
-        <strong>📅 Data:</strong> ${data}<br>
-        <strong>⏰ Hora:</strong> ${hora}<br><br>
-        <strong>🌙 Fase da Lua:</strong> ${faseLua}
-    `;
-}
+    const url = "https://stellarium-web.org/";
 
-function calcularFaseLua(data) {
-    const dataNascimento = new Date(data);
-    const luaNovaReferencia = new Date('2000-01-06T18:14:00');
-
-    const diff = dataNascimento - luaNovaReferencia;
-    const dias = diff / (1000 * 60 * 60 * 24);
-
-    const cicloLunar = 29.53058867;
-    const fase = ((dias % cicloLunar) + cicloLunar) % cicloLunar;
-
-    if (fase < 1.84566) return "🌑 Lua Nova";
-    if (fase < 5.53699) return "🌒 Lua Crescente";
-    if (fase < 9.22831) return "🌓 Quarto Crescente";
-    if (fase < 12.91963) return "🌔 Gibosa Crescente";
-    if (fase < 16.61096) return "🌕 Lua Cheia";
-    if (fase < 20.30228) return "🌖 Gibosa Minguante";
-    if (fase < 23.99361) return "🌗 Quarto Minguante";
-    if (fase < 27.68493) return "🌘 Lua Minguante";
-
-    return "🌑 Lua Nova";
+    window.open(url, "_blank");
 }
 </script>
 
